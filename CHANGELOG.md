@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.1.0] - 2025-09-02
 
 ### Breaking Changes
 
@@ -19,6 +19,7 @@
 
 ### Enhanced
 
+- **Live Demo Available**: Interactive demo now available at https://pod666.github.io/sentry-zaraz-consent-integration/
 - **Upgraded to Tailwind CSS v4**: Demo now uses Tailwind CSS v4 with modern architecture
   - Replaced PostCSS configuration with native Vite plugin approach
   - Updated CSS imports to use `@import "tailwindcss"` syntax

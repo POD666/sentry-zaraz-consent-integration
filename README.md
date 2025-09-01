@@ -2,6 +2,8 @@
 
 A TypeScript integration that dynamically adjusts Sentry configuration based on Cloudflare Zaraz consent preferences, ensuring GDPR and privacy compliance while maintaining optimal error tracking and performance monitoring.
 
+**🌐 [Live Demo](https://pod666.github.io/sentry-zaraz-consent-integration/)**
+
 ## Features
 
 - **🎯 Purpose-based Configuration**: predefined Map Zaraz consent purposes to specific Sentry features
@@ -16,8 +18,10 @@ A TypeScript integration that dynamically adjusts Sentry configuration based on 
 ### Installation
 
 ```bash
-npm install sentry-zaraz-consent-integration @sentry/react @sentry/types
+npm install sentry-zaraz-consent-integration
 ```
+
+**Note**: This package requires `@sentry/react` (or another Sentry SDK) and `@sentry/types` as peer dependencies in your project.
 
 ### Basic Usage
 
@@ -30,12 +34,11 @@ Sentry.init({
   integrations: [
     sentryZarazConsentIntegration({
       purposeMapping: {
-        functional: ['necessary', 'functional'],
-        analytics: ['analytics', 'performance'],
-        marketing: ['marketing', 'advertising'],
-        preferences: ['preferences', 'personalization'],
+        functional: true, // always enabled regardless of consent if you wish
+        analytics: ['analytics', 'performance'], // require both
+        marketing: ['marketing'], // obviously
+        preferences: false, // never enabled
       },
-      timeout: 10000, // Wait up to 10 seconds for consent
       debug: true, // Enable debug logging
     }),
   ],
@@ -66,12 +69,6 @@ interface SentryZarazConsentIntegrationOptions {
   purposeMapping: PurposeMapping;
 
   /**
-   * Timeout for waiting for consent (milliseconds)
-   * @default 10000
-   */
-  timeout?: number;
-
-  /**
    * Enable debug logging
    * @default false
    */
@@ -90,36 +87,6 @@ interface PurposeMapping {
 }
 ```
 
-## Demo Project
-
-Experience the integration in action with our interactive demo:
-
-```bash
-# Clone the repository
-git clone https://github.com/POD666/sentry-zaraz-consent-integration.git
-
-# Install dependencies
-cd sentry-zaraz-consent-integration
-npm install
-
-# Start the demo
-npm run demo:dev
-```
-
-The demo will be available at `http://localhost:3000` and includes:
-
-- **Interactive Consent Controls**: Toggle consent purposes and see real-time effects
-- **Sentry Event Testing**: Generate different types of events to test filtering
-- **Console Monitoring**: Real-time logs showing integration behavior
-- **Environment Simulation**: Switch between development (fake Zaraz) and production modes
-
-### Demo Features
-
-- 🎛️ **Consent Toggle Controls**: Test different consent combinations
-- 🧪 **Event Testing**: Generate errors, messages, transactions, and breadcrumbs
-- 📋 **Real-time Logging**: Monitor integration behavior and event processing
-- 🌍 **Environment Aware**: Automatic detection of development vs production
-
 ## Integration Behavior
 
 ### Event Processing Flow
@@ -129,8 +96,10 @@ The demo will be available at `http://localhost:3000` and includes:
 3. **Decision Making**:
    - ✅ **Consent Granted**: Event is allowed through
    - ❌ **Consent Denied**: Event is blocked
-   - ⏳ **Consent Unknown**: Event is queued for later processing
-4. **Queue Processing**: When consent is determined, queued events are processed
+   - ⏳ **Consent Unknown**: Event is blocked (no queuing by default)
+4. **Real-time Updates**: When consent changes, Sentry configuration updates immediately
+
+> **Note**: Since v1.1.0, events are not queued when consent is unknown. The integration maintains strict privacy by default and only processes events when explicit consent is granted.
 
 ### Sentry Configuration Adjustments
 
@@ -188,8 +157,19 @@ npm run demo:build
 
 - ES2020+ support required
 - Modern browsers (Chrome 80+, Firefox 74+, Safari 13.1+, Edge 80+)
-- Dynamic import support
+- ES Modules support
 - Fetch API support
+
+## Dependencies
+
+### Required Peer Dependencies
+
+- `@sentry/react` (^8.29.0 or compatible Sentry SDK)
+- `@sentry/types` (^8.29.0)
+
+### Package Dependencies
+
+- `zaraz-ts` (^1.2.0) - TypeScript definitions for Zaraz APIs
 
 ## Contributing
 
@@ -205,6 +185,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Support
 
+- 🌐 [Live Demo](https://pod666.github.io/sentry-zaraz-consent-integration/)
 - 📚 [Demo Documentation](demo/README.md)
 - 🐛 [Issue Tracker](https://github.com/POD666/sentry-zaraz-consent-integration/issues)
 - 📝 [Changelog](CHANGELOG.md)
