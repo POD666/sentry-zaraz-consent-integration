@@ -1,6 +1,6 @@
 {
   "name": "sentry-zaraz-consent-integration",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "description": "Adjust Sentry configuration according to current Zaraz Consent selection",
   "main": "dist/SentryZarazConsentIntegration.js",
