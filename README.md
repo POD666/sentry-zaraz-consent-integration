@@ -1,5 +1,8 @@
 # Sentry Zaraz Consent Integration
 
+[![npm version](https://badge.fury.io/js/sentry-zaraz-consent-integration.svg)](https://badge.fury.io/js/sentry-zaraz-consent-integration)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 A TypeScript integration that dynamically adjusts Sentry configuration based on Cloudflare Zaraz consent preferences, ensuring GDPR and privacy compliance while maintaining optimal error tracking and performance monitoring.
 
 **🌐 [Live Demo](https://pod666.github.io/sentry-zaraz-consent-integration/)**
