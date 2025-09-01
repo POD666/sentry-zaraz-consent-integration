@@ -24,7 +24,8 @@
     "demo:dev": "npm run build && cd demo && npm run dev",
     "demo:build": "npm run build && cd demo && npm run build",
     "demo:preview": "cd demo && npm run preview",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "npm run build && np"
   },
   "repository": {
     "type": "git",
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "np": "^10.2.0"
   }
 }

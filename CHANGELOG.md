@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Breaking Changes
+
+- **Simplified Integration API**: `sentryZarazConsentIntegration` now only accepts `purposeMapping` and `debug` props
+  - Removed `sentryConfig` and `integrationConfig` options from integration parameters
+  - Sentry configuration (sendDefaultPii, maxBreadcrumbs, etc.) should now be set directly in `Sentry.init()`
+  - Integration automatically reads configuration from the Sentry instance during initialization
+  - This change makes the API cleaner and follows Sentry's recommended patterns
+  - **Migration**: Move all `sentryConfig` properties to the top-level `Sentry.init()` options
+
 ### Updated
 
 - **fake-cloudflare-zaraz-consent**: Upgraded from v1.2.2 to v1.3.1

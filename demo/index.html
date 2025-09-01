@@ -5,81 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sentry Zaraz Consent Integration Demo</title>
 </head>
-<body class="font-sans max-w-6xl mx-auto p-5 leading-relaxed bg-slate-50">
-    <div class="bg-white rounded-lg p-6 shadow-sm mb-6">
-        <h1 class="text-slate-800 mt-0 flex flex-wrap items-center justify-between">
-            Sentry Zaraz Consent Integration Demo
-            <a id="environment-badge" href="https://github.com/POD666/fake-cloudflare-zaraz-consent" target="_blank" class="environment-badge">Fake Zaraz Consent</a>
-        </h1>
-        <p class="text-slate-600">This demo shows how Sentry configuration changes based on Zaraz consent settings (the fake one is used for the demo). Toggle consent purposes below and observe how Sentry behavior adapts.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-white rounded-lg p-6 shadow-sm">
-            <h2 class="text-slate-800 mt-0 flex justify-between items-center">
-                Zaraz Consent Sentry Interpretation
-                <button id="show-consent" class="btn primary ml-4 text-sm py-2 px-4">Show Consent</button>
-            </h2>
-            <div class="border-2 border-slate-200 rounded-lg p-5 my-5 bg-slate-50 relative">
-                <div class="absolute -top-3 left-4 bg-slate-50 px-2 text-xs text-slate-500 font-medium">
-                    Read-only - Use "Show Consent" to change settings
-                </div>
-                <div class="flex items-center gap-3 my-2.5">
-                    <label class="font-medium min-w-[120px]">Functional:</label>
-                    <div class="toggle-switch active readonly" id="functional-toggle" data-purpose="functional">
-                    </div>
-                    <span class="text-slate-600 text-sm">Required for core error tracking</span>
-                </div>
-                <div class="flex items-center gap-3 my-2.5">
-                    <label class="font-medium min-w-[120px]">Analytics:</label>
-                    <div class="toggle-switch active readonly" id="analytics-toggle" data-purpose="analytics">
-                    </div>
-                    <span class="text-slate-600 text-sm">Performance monitoring & metrics</span>
-                </div>
-                <div class="flex items-center gap-3 my-2.5">
-                    <label class="font-medium min-w-[120px]">Marketing:</label>
-                    <div class="toggle-switch readonly" id="marketing-toggle" data-purpose="marketing">
-                    </div>
-                    <span class="text-slate-600 text-sm">Session replay & user behavior</span>
-                </div>
-                <div class="flex items-center gap-3 my-2.5">
-                    <label class="font-medium min-w-[120px]">Preferences:</label>
-                    <div class="toggle-switch readonly" id="preferences-toggle" data-purpose="preferences">
-                    </div>
-                    <span class="text-slate-600 text-sm">PII collection & personalization</span>
-                </div>
-            </div>
-
-            <div class="status info" id="consent-status">
-                Current consent status will appear here...
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg p-6 shadow-sm">
-            <h2 class="text-slate-800 mt-0">Test Sentry Events</h2>
-            <div class="flex flex-wrap gap-3 my-5">
-                <button id="test-error" class="btn danger">Test Error</button>
-                <button id="test-message" class="btn primary">Test Message</button>
-                <button id="test-transaction" class="btn">Test Transaction</button>
-                <button id="test-breadcrumb" class="btn">Add Breadcrumb</button>
-                <button id="test-user" class="btn">Set User Info</button>
-            </div>
-
-            <div class="status info" id="sentry-status">
-                Sentry configuration status will appear here...
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-lg p-6 shadow-sm mt-6">
-        <h2 class="text-slate-800 mt-0">Console Logs</h2>
-        <div class="logs" id="console-logs">
-            Logs will appear here...
-        </div>
-        <button id="clear-logs" class="btn">Clear Logs</button>
-    </div>
-
-    <!-- Demo application -->
-    <script type="module" src="/src/main.ts"></script>
+<body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>
