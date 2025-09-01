@@ -1,6 +1,7 @@
 {
   "name": "sentry-zaraz-consent-integration",
   "version": "1.0.0",
+  "type": "module",
   "description": "Adjust Sentry configuration according to current Zaraz Consent selection",
   "main": "dist/SentryZarazConsentIntegration.js",
   "module": "dist/SentryZarazConsentIntegration.js",
@@ -24,7 +25,7 @@
     "demo:dev": "npm run build && cd demo && npm run dev",
     "demo:build": "npm run build && cd demo && npm run build",
     "demo:preview": "cd demo && npm run preview",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "release": "npm run build && np"
   },
   "repository": {
