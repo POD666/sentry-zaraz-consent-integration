@@ -28,6 +28,11 @@ npm install sentry-zaraz-consent-integration
 
 ### Basic Usage
 
+Given following purposes configured in CLoudflare:
+![cloudflare purposes example screenshot](cf-screenshot.png)
+
+Then `purposeMapping` would look like this:
+
 ```typescript
 import { sentryZarazConsentIntegration } from 'sentry-zaraz-consent-integration';
 import * as Sentry from '@sentry/react';
@@ -37,10 +42,10 @@ Sentry.init({
   integrations: [
     sentryZarazConsentIntegration({
       purposeMapping: {
-        functional: true, // always enabled regardless of consent if you wish
-        analytics: ['analytics', 'performance'], // require both
-        marketing: ['marketing'], // obviously
-        preferences: false, // never enabled
+        functional: ['dqVA'], // requires dqVA consent to be selected
+        analytics: ['USeX'],
+        marketing: true, // always enabled
+        preferences: false, // always disabled
       },
       debug: true, // Enable debug logging
     }),
