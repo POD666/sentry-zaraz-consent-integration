@@ -1,0 +1,55 @@
+{
+  "name": "sentry-zaraz-consent-integration",
+  "version": "1.0.0",
+  "description": "Adjust Sentry configuration according to current Zaraz Consent selection",
+  "main": "dist/SentryZarazConsentIntegration.js",
+  "module": "dist/SentryZarazConsentIntegration.js",
+  "types": "dist/SentryZarazConsentIntegration.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/SentryZarazConsentIntegration.js",
+      "require": "./dist/SentryZarazConsentIntegration.js",
+      "types": "./dist/SentryZarazConsentIntegration.d.ts"
+    }
+  },
+  "files": [
+    "dist/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npx tsc src/SentryZarazConsentIntegration.ts --outDir dist --target es2020 --module es2020 --lib es2020,dom --moduleResolution node --allowSyntheticDefaultImports --esModuleInterop --skipLibCheck --declaration",
+    "build:watch": "npx tsc src/SentryZarazConsentIntegration.ts --outDir dist --target es2020 --module es2020 --lib es2020,dom --moduleResolution node --allowSyntheticDefaultImports --esModuleInterop --skipLibCheck --declaration --watch",
+    "demo:install": "cd demo && npm install",
+    "demo:dev": "npm run build && cd demo && npm run dev",
+    "demo:build": "npm run build && cd demo && npm run build",
+    "demo:preview": "cd demo && npm run preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/POD666/sentry-zaraz-consent-integration.git"
+  },
+  "keywords": [
+    "sentry",
+    "zaraz",
+    "consent",
+    "gdpr"
+  ],
+  "author": "v.v.danyliuk@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/POD666/sentry-zaraz-consent-integration/issues"
+  },
+  "homepage": "https://github.com/POD666/sentry-zaraz-consent-integration#readme",
+  "dependencies": {
+    "@sentry/react": "^8.29.0",
+    "@sentry/types": "^8.29.0",
+    "sentry": "^0.1.2",
+    "zaraz-ts": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "typescript": "^5.9.2"
+  }
+}

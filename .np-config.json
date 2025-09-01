@@ -1,0 +1,13 @@
+{
+  "publish": true,
+  "tests": false,
+  "cleanup": false,
+  "yarn": false,
+  "contents": ".",
+  "anyBranch": false,
+  "branch": "main",
+  "releaseDraft": false,
+  "tag": "latest",
+  "message": "Release v%s",
+  "preview": false
+}
