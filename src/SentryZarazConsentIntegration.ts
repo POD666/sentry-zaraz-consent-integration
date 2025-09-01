@@ -317,8 +317,8 @@ class SentryZarazConsentIntegrationClass implements Integration {
             const error = new Error(
               event.exception.values[0].value || 'Queued error'
             );
-            error.stack = event.exception.values[0].stacktrace?.frames
-              ?.map((f: any) => `${f.filename || 'unknown'}:${f.lineno || 0}`)
+            error.stack = (event.exception.values[0].stacktrace?.frames ?? [])
+              .map((f: any) => `${f.filename || 'unknown'}:${f.lineno || 0}`)
               .join('\n');
 
             Sentry.captureException(error);

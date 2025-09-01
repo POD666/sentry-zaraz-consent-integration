@@ -19,14 +19,16 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "npx tsc src/SentryZarazConsentIntegration.ts --outDir dist --target es2020 --module es2020 --lib es2020,dom --moduleResolution node --allowSyntheticDefaultImports --esModuleInterop --skipLibCheck --declaration",
-    "build:watch": "npx tsc src/SentryZarazConsentIntegration.ts --outDir dist --target es2020 --module es2020 --lib es2020,dom --moduleResolution node --allowSyntheticDefaultImports --esModuleInterop --skipLibCheck --declaration --watch",
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "demo:dev": "cd demo && npm run dev",
     "demo:install": "cd demo && npm install",
-    "demo:dev": "npm run build && cd demo && npm run dev",
-    "demo:build": "npm run build && cd demo && npm run build",
-    "demo:preview": "cd demo && npm run preview",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "release": "npm run build && np"
+    "demo:build": "cd demo && npm run build",
+    "test": "echo \"No tests yet\" && exit 0",
+    "release": "np",
+    "release:dry": "np --dry-run"
   },
   "repository": {
     "type": "git",
