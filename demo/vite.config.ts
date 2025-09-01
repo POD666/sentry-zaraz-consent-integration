@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  base: '/sentry-zaraz-consent-integration/',
+  publicDir: 'public',
   server: {
     port: 3000,
     host: true,
@@ -11,7 +13,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
-    target: 'es2020',
+    emptyOutDir: true,
   },
   resolve: {
     alias: {
