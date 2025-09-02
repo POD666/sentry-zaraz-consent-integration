@@ -2,6 +2,8 @@
 
 This document provides a comprehensive overview of all Sentry configuration options and integration settings, along with the consent purposes that should control each configuration based on privacy and data collection requirements.
 
+**🛡️ Privacy-First Approach**: This guide emphasizes data minimization and privacy-by-default practices, ensuring that the most privacy-sensitive features (like Session Replay) are properly categorized and controlled. The purpose mappings align with GDPR requirements for consent granularity and data protection.
+
 ## Configuration Options
 
 | Configuration         | Type            | Default      | Description                                             | Required Consent Purpose | No Purpose Value     |
@@ -74,6 +76,8 @@ Many integrations have their own configuration options that should also be contr
 | `networkResponseHeaders`  | array    | `[]`    | Additional response headers to capture    | **preferences**          | `[]`             |
 | `beforeAddRecordingEvent` | function | -       | Filter recording events                   | **preferences**          | Block all events |
 
+> **🛡️ Privacy-by-Default for Session Replay**: The integration enforces the safest Session Replay settings by default, even when `preferences` consent is granted. Sentry's defaults (maskAllText: true, maskAllInputs: true, blockAllMedia: true) ensure privacy protection. Developers must explicitly override these settings in their `replayIntegration()` configuration if they need to unmask specific elements for debugging purposes.
+
 ### Browser Tracing Integration (`browserTracingIntegration`)
 
 | Configuration Option | Type     | Default | Description                     | Required Consent Purpose | No Purpose Value |
@@ -134,12 +138,14 @@ Many integrations have their own configuration options that should also be contr
 
 ## Consent Purpose Definitions
 
-| Purpose         | Description                                                     | Typical Use Cases                                                                                         |
-| --------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| **functional**  | Essential functionality required for basic error monitoring     | Core error tracking, unhandled exceptions, basic SDK operation                                            |
-| **analytics**   | Performance monitoring, detailed context, and usage analytics   | Performance tracing, breadcrumbs, detailed context, user behavior                                         |
-| **preferences** | User-specific data and personally identifiable information      | IP addresses, session replays, user profiles, detailed personal context                                   |
-| **marketing**   | Data used for marketing, user tracking, and behavioral analysis | User journey tracking, conversion funnels, A/B test analytics, user identification for marketing purposes |
+| Purpose         | Description                                                                         | Typical Use Cases                                                                                                                    |
+| --------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **functional**  | Essential functionality required for basic error monitoring                         | Core error tracking, unhandled exceptions, basic session health (`autoSessionTracking`), basic SDK operation                         |
+| **analytics**   | Performance monitoring, detailed context, and usage analytics                       | Performance tracing, breadcrumbs, detailed context, profiling, detailed session analytics                                            |
+| **preferences** | User-specific data and personally identifiable information (most privacy-sensitive) | IP addresses, **session replays**, user profiles, detailed personal context, PII collection                                          |
+| **marketing**   | User identification and behavioral analysis for marketing purposes                  | User identification within `initialScope` (user.id, campaign tags), A/B test analytics, feature flag integrations, marketing cohorts |
+
+> **Privacy Note**: Session Replay is categorized under **preferences** as it's one of the most privacy-sensitive features, capable of capturing user interactions and potentially PII. Even with consent, Sentry's Session Replay defaults to privacy-safe settings (maskAllText: true, maskAllInputs: true, blockAllMedia: true).
 
 ## Implementation Recommendations
 
@@ -232,13 +238,15 @@ Sentry.init({
 
 ### Marketing Consent Example (functional + analytics + preferences + marketing)
 
+> **Marketing Purpose Focus**: This example shows how `marketing` consent specifically enables user identification and behavioral tracking for marketing purposes - distinct from the PII collection under `preferences` consent or performance analytics under `analytics` consent.
+
 ```javascript
 Sentry.init({
   dsn: 'YOUR_DSN',
   enabled: true,
   sendDefaultPii: true,
   initialScope: {
-    // User identification for marketing analysis
+    // User identification for marketing analysis and A/B testing cohorts
     user: { id: userId, email: userEmail },
     tags: {
       segment: userSegment,
@@ -265,8 +273,8 @@ The Sentry Zaraz Consent Integration should dynamically update these configurati
 
 1. **Functional consent revoked**: Disable the SDK entirely (`enabled: false`, `sampleRate: 0.0`)
 2. **Analytics consent revoked**: Remove performance monitoring, breadcrumbs, and detailed context
-3. **Preferences consent revoked**: Disable PII collection, session replay, and detailed network capture
-4. **Marketing consent revoked**: Remove user identification, feature flag tracking, and marketing tags
+3. **Preferences consent revoked**: Disable PII collection, **session replay** (most privacy-sensitive), and detailed network capture
+4. **Marketing consent revoked**: Remove user identification, feature flag tracking, and marketing tags from `initialScope`
 5. **Consent granted**: Enable corresponding features and process queued events
 
 ### Integration Configuration Updates
@@ -274,8 +282,8 @@ The Sentry Zaraz Consent Integration should dynamically update these configurati
 When consent changes, the integration should also update integration-specific configurations:
 
 - **Analytics consent revoked**: Set integration configs like `traceFetch: false`, `breadcrumbs: false`, `levels: []`
-- **Preferences consent revoked**: Set replay configs like `networkCaptureBodies: false`, `stickySession: false`
-- **Marketing consent revoked**: Remove feature flag integrations and user tracking configurations
+- **Preferences consent revoked**: Set replay configs like `replaysSessionSampleRate: 0.0`, `networkCaptureBodies: false`, `stickySession: false`
+- **Marketing consent revoked**: Remove feature flag integrations and clear user identification from scope
 
 ## Notes
 
@@ -285,5 +293,7 @@ When consent changes, the integration should also update integration-specific co
 - **Key insight**: `dsn` can always be set (it's just a configuration), but `enabled` and `sampleRate` control whether data is actually sent
 - **Marketing consent usage**: Now used for user identification (`initialScope` with user data), feature flag integrations, and behavioral tracking
 - **Integration configurations**: Many integrations have their own privacy-sensitive options that need consent control
+- **Session Replay Privacy**: Session Replay is correctly categorized under **preferences** as one of the most privacy-sensitive features, capable of capturing user interactions and potentially PII
+- **Session Tracking Distinction**: Basic session health tracking (`autoSessionTracking`) is **functional**, while detailed session analytics (`browserSessionIntegration`) is **analytics**
 - When consent is revoked, existing data should not be retroactively removed, but new data collection should be stopped
 - Consider implementing graceful degradation where core functionality remains available even with limited consent

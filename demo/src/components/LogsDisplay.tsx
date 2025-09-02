@@ -7,12 +7,7 @@ interface LogsDisplayProps {
 export const LogsDisplay: React.FC<LogsDisplayProps> = ({ className = '' }) => {
   const [logs, setLogs] = useState<string[]>([]);
 
-  // Override console methods
   useEffect(() => {
-    const originalConsoleLog = console.log;
-    const originalConsoleError = console.error;
-    const originalConsoleWarn = console.warn;
-
     const addLog = (type: string, ...args: any[]) => {
       const timestamp = new Date().toLocaleTimeString();
       const message = args
@@ -30,25 +25,39 @@ export const LogsDisplay: React.FC<LogsDisplayProps> = ({ className = '' }) => {
       });
     };
 
-    console.log = (...args: any[]) => {
-      originalConsoleLog(...args);
-      addLog('log', ...args);
+    let isActive = true;
+
+    // Use Sentry's proven console instrumentation approach
+    const setupConsoleInstrumentation = async () => {
+      try {
+        // Try to import Sentry's console instrumentation handler
+        const sentryCore = await import('@sentry/core');
+
+        // Check if addConsoleInstrumentationHandler is available
+        if ('addConsoleInstrumentationHandler' in sentryCore) {
+          const { addConsoleInstrumentationHandler } = sentryCore as any;
+
+          addConsoleInstrumentationHandler(
+            ({ args, level }: { args: any[]; level: string }) => {
+              if (isActive) {
+                addLog(level, ...args);
+              }
+            }
+          );
+
+          return;
+        }
+      } catch (error) {
+        // Fall through to manual approach
+      }
+
+      console.warn('[LogsDisplay] addConsoleInstrumentationHandler failed');
     };
 
-    console.error = (...args: any[]) => {
-      originalConsoleError(...args);
-      addLog('error', ...args);
-    };
-
-    console.warn = (...args: any[]) => {
-      originalConsoleWarn(...args);
-      addLog('warn', ...args);
-    };
+    setupConsoleInstrumentation();
 
     return () => {
-      console.log = originalConsoleLog;
-      console.error = originalConsoleError;
-      console.warn = originalConsoleWarn;
+      isActive = false;
     };
   }, []);
 

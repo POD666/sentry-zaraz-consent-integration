@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.2.0] - 2025-09-02
+
+### Enhanced Privacy Compliance 🛡️
+
+- **Corrected Session Replay Purpose Mapping**: Fixed inconsistency between documentation and implementation
+  - **README.md Updated**: Moved Session Replay from `marketing` to `preferences` purpose in documentation
+  - **Implementation Aligned**: Session Replay (`replaysSessionSampleRate`, `replaysOnErrorSampleRate`) now correctly documented as controlled by `preferences` consent
+  - **Privacy-Conscious Approach**: Session Replay is now properly categorized as one of the most privacy-sensitive features
+
+### Improved Purpose Definitions 📋
+
+- **Enhanced Purpose Table**: Updated README.md with clearer descriptions of each consent purpose:
+  - **Functional**: Core error tracking, session tracking, unhandled rejections - Essential functionality
+  - **Analytics**: Performance monitoring, traces, profiling, breadcrumbs - Performance metrics and optimization
+  - **Preferences**: Session replay, PII collection, user context, personalization - Personal data and customized experiences
+  - **Marketing**: User identification for A/B testing, feature flags, campaign tracking - User interaction and behavior analysis for marketing
+
+### Documentation Enhancements 📚
+
+- **Marketing Purpose Clarification**: Added detailed explanation that `marketing` consent is primarily for user identification within `initialScope` (user.id, campaign tags, A/B testing cohorts) and feature flag integrations, distinguishing it from `preferences` consent which handles raw PII and screen recordings
+- **Privacy-by-Default Emphasis**: Enhanced documentation to emphasize that Session Replay uses Sentry's safest defaults (maskAllText: true, maskAllInputs: true, blockAllMedia: true) even when preferences consent is granted
+- **Configuration Examples**: Updated Sentry configuration adjustment examples to show correct purpose mappings
+- **Code Comments**: Enhanced implementation comments to clarify that Session Replay is among the most privacy-sensitive features
+
+### GDPR & Privacy Alignment 🎯
+
+- **Data Minimization Support**: Integration now better supports GDPR data minimization by correctly categorizing Session Replay as privacy-sensitive
+- **Consent Granularity**: Improved consent purpose definitions align with privacy best practices for different types of data collection
+- **Clear Privacy Boundaries**: Better distinction between analytical performance data (analytics) and personal behavior recordings (preferences)
+
 ## [1.1.0] - 2025-09-02
 
 ### Breaking Changes

@@ -26,6 +26,18 @@ Sentry.init({
   },
 
   integrations: [
+    // Configure Session Replay with privacy-safe defaults BEFORE the consent integration
+    Sentry.replayIntegration({
+      maskAllText: true, // Privacy-safe: mask all text content
+      maskAllInputs: true, // Privacy-safe: mask all input values
+      blockAllMedia: true, // Privacy-safe: block all media content
+      networkCaptureBodies: false, // Privacy-safe: don't capture request/response bodies
+      stickySession: true, // Can be enabled as it doesn't expose PII
+    }),
+    Sentry.captureConsoleIntegration({
+      levels: ['error'],
+    }),
+    // The consent integration will control when replay is active via sample rates
     sentryZarazConsentIntegration({
       purposeMapping,
       debug: true,

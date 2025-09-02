@@ -812,7 +812,36 @@ export const SentrySettingsDisplay: React.FC<SentrySettingsDisplayProps> = ({
                 <div className='p-4 border-t border-slate-200'>
                   <pre className='bg-slate-900 text-green-400 p-4 rounded-lg text-sm'>
                     <code>
-                      {JSON.stringify(sentrySettings.rawOptions, null, 2)}
+                      {JSON.stringify(
+                        sentrySettings.rawOptions,
+                        (key, value) => {
+                          // Handle circular references and complex objects
+                          if (value && typeof value === 'object') {
+                            // Skip circular references and complex internal objects
+                            if (value === value.constructor?.prototype)
+                              return '[Circular]';
+                            if (
+                              key.startsWith('_') &&
+                              typeof value === 'object'
+                            )
+                              return '[Internal Object]';
+                            if (
+                              value.constructor &&
+                              value.constructor.name &&
+                              [
+                                'ReplayContainer',
+                                'HTMLElement',
+                                'Window',
+                                'Document',
+                              ].includes(value.constructor.name)
+                            ) {
+                              return `[${value.constructor.name}]`;
+                            }
+                          }
+                          return value;
+                        },
+                        2
+                      )}
                     </code>
                   </pre>
                 </div>

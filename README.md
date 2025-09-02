@@ -57,12 +57,14 @@ Sentry.init({
 
 The integration supports four consent categories that map to different Sentry features:
 
-| Purpose         | Sentry Features                                             | Description                                  |
-| --------------- | ----------------------------------------------------------- | -------------------------------------------- |
-| **Functional**  | Core error tracking, session tracking, unhandled rejections | Essential functionality for error monitoring |
-| **Analytics**   | Performance monitoring, traces, profiling                   | Performance metrics and optimization data    |
-| **Marketing**   | Session replay, user behavior tracking                      | User interaction and behavior analysis       |
-| **Preferences** | PII collection, user context, personalization               | Personal data and customized experiences     |
+| Purpose         | Sentry Features                                                       | Description                                          |
+| --------------- | --------------------------------------------------------------------- | ---------------------------------------------------- |
+| **Functional**  | Core error tracking, session tracking, unhandled rejections           | Essential functionality for error monitoring         |
+| **Analytics**   | Performance monitoring, traces, profiling, breadcrumbs                | Performance metrics and optimization data            |
+| **Preferences** | Session replay, PII collection, user context, personalization         | Personal data and customized experiences             |
+| **Marketing**   | User identification for A/B testing, feature flags, campaign tracking | User interaction and behavior analysis for marketing |
+
+> **Session Tracking Note**: Basic session status tracking for release health (`autoSessionTracking`) is categorized under **functional** consent as it's essential for error monitoring. Detailed session analytics integrations that track user adoption patterns over time would be categorized under **analytics** consent.
 
 ## Configuration
 
@@ -89,11 +91,13 @@ interface SentryZarazConsentIntegrationOptions {
 ```typescript
 interface PurposeMapping {
   functional?: string[]; // Core functionality
-  analytics?: string[]; // Performance monitoring
-  marketing?: string[]; // User behavior tracking
-  preferences?: string[]; // PII and personalization
+  analytics?: string[]; // Performance monitoring and detailed context
+  preferences?: string[]; // PII and session replay (privacy-sensitive)
+  marketing?: string[]; // User identification and behavioral analysis
 }
 ```
+
+> **Marketing Purpose Note**: The `marketing` purpose is primarily used for user identification within `initialScope` (such as setting `user.id`, custom tags for A/B testing, or campaign tracking), feature flag integrations, and analytics cohorts. This distinguishes it from the `preferences` purpose, which deals with collecting raw PII and detailed screen recordings.
 
 ## Integration Behavior
 
@@ -117,18 +121,29 @@ Based on consent status, the integration automatically adjusts:
 // Functional consent affects core tracking
 autoSessionTracking: functionalConsent;
 captureUnhandledRejections: functionalConsent;
+enabled: functionalConsent;
 
-// Analytics consent affects performance monitoring
+// Analytics consent affects performance monitoring and detailed context
 tracesSampleRate: analyticsConsent ? originalRate : 0;
 profilesSampleRate: analyticsConsent ? originalRate : 0;
+maxBreadcrumbs: analyticsConsent ? originalValue : 0;
+attachStacktrace: analyticsConsent;
 
-// Marketing consent affects session replay
-replaysSessionSampleRate: marketingConsent ? originalRate : 0;
-replaysOnErrorSampleRate: marketingConsent ? originalRate : 0;
-
-// Preferences consent affects PII collection
+// Preferences consent affects PII and session replay (most privacy-sensitive)
 sendDefaultPii: preferencesConsent;
+replaysSessionSampleRate: preferencesConsent ? originalRate : 0;
+replaysOnErrorSampleRate: preferencesConsent ? originalRate : 0;
+
+// Marketing consent affects user identification and behavioral tracking
+initialScope: marketingConsent
+  ? {
+      user: { id: userId, segment: userSegment },
+      tags: { campaign: campaignId, cohort: userCohort },
+    }
+  : {};
 ```
+
+> **Privacy by Default**: Even when `preferences` consent is granted, Session Replay uses Sentry's safest defaults (maskAllText: true, maskAllInputs: true, blockAllMedia: true). Developers must explicitly override these settings if they need to capture unmasked content for debugging purposes.
 
 ## Development
 
