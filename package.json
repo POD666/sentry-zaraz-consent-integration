@@ -1,6 +1,6 @@
 {
   "name": "sentry-zaraz-consent-integration",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "type": "module",
   "description": "A wrapper around @imviidx/sentry-consent-integration specifically for Cloudflare Zaraz consent management",
   "main": "dist/index.js",
