@@ -19,7 +19,7 @@ This demo is built with:
 - **TypeScript**: Full type safety and modern JavaScript features
 - **ES Modules**: Native module support with proper imports/exports
 - **Package Dependencies**:
-  - `sentry-zaraz-consent-integration`: The main integration package
+  - `@imviidx/sentry-zaraz-consent-integration`: The main integration package
   - `zaraz-ts`: TypeScript definitions and utilities for Zaraz
   - `@sentry/browser`: Sentry SDK for browsers
   - `fake-cloudflare-zaraz-consent`: Development simulation of Zaraz consent API

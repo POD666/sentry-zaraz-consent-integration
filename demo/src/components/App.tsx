@@ -12,7 +12,7 @@ export const App: React.FC = () => {
         <h1 className='text-slate-800 mt-0 flex flex-wrap items-center justify-between'>
           Sentry Consent Integration Demo
           <a
-            href='https://github.com/POD666/fake-cloudflare-zaraz-consent'
+            href='https://github.com/imviidx/fake-cloudflare-zaraz-consent'
             target='_blank'
             rel='noopener noreferrer'
             className={`environment-badge`}

@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client';
 import { App } from './components/App';
 import './style.css';
 import * as Sentry from '@sentry/browser';
-import { sentryZarazConsentIntegration } from 'sentry-zaraz-consent-integration';
+import { sentryZarazConsentIntegration } from '@imviidx/sentry-zaraz-consent-integration';
 
 import { purposeMapping, initFakeZarazShort } from './fake-zaraz.js';
 

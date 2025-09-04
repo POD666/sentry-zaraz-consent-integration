@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getZarazConsentState } from 'sentry-zaraz-consent-integration';
+import { getZarazConsentState } from '@imviidx/sentry-zaraz-consent-integration';
 import { zaraz } from 'zaraz-ts';
 import { purposeMapping } from '../fake-zaraz.js';
 

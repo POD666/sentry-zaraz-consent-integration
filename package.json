@@ -1,5 +1,5 @@
 {
-  "name": "sentry-zaraz-consent-integration",
+  "name": "@imviidx/sentry-zaraz-consent-integration",
   "version": "3.0.1",
   "type": "module",
   "description": "A wrapper around @imviidx/sentry-consent-integration specifically for Cloudflare Zaraz consent management",
@@ -32,7 +32,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/POD666/sentry-zaraz-consent-integration.git"
+    "url": "git+https://github.com/imviidx/sentry-zaraz-consent-integration.git"
   },
   "keywords": [
     "sentry",
@@ -45,9 +45,9 @@
   "author": "v.v.danyliuk@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/POD666/sentry-zaraz-consent-integration/issues"
+    "url": "https://github.com/imviidx/sentry-zaraz-consent-integration/issues"
   },
-  "homepage": "https://github.com/POD666/sentry-zaraz-consent-integration#readme",
+  "homepage": "https://github.com/imviidx/sentry-zaraz-consent-integration#readme",
   "dependencies": {
     "@imviidx/sentry-consent-integration": "^0.1.2",
     "zaraz-ts": "^1.2.0"

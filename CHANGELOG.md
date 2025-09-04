@@ -31,18 +31,18 @@
 
 ### Migration Guide 📚
 
-**From v2.x users**: Update package name back to `sentry-zaraz-consent-integration`
+**From v2.x users**: Update package name back to `@imviidx/sentry-zaraz-consent-integration`
 
 ```bash
 npm uninstall sentry-consent-integration
-npm install sentry-zaraz-consent-integration
+npm install @imviidx/sentry-zaraz-consent-integration
 ```
 
 **API remains identical**: No code changes needed in your Sentry.init() configuration
 
 ```typescript
 // Same API as v1.x and v2.x
-import { sentryZarazConsentIntegration } from 'sentry-zaraz-consent-integration';
+import { sentryZarazConsentIntegration } from '@imviidx/sentry-zaraz-consent-integration';
 
 Sentry.init({
   integrations: [
@@ -183,7 +183,7 @@ sentryConsentIntegration({
 
 ### Enhanced
 
-- **Live Demo Available**: Interactive demo now available at https://pod666.github.io/sentry-zaraz-consent-integration/
+- **Live Demo Available**: Interactive demo now available at https://imviidx.github.io/sentry-zaraz-consent-integration/
 - **Upgraded to Tailwind CSS v4**: Demo now uses Tailwind CSS v4 with modern architecture
   - Replaced PostCSS configuration with native Vite plugin approach
   - Updated CSS imports to use `@import "tailwindcss"` syntax

@@ -1,5 +1,5 @@
-import { initFakeZaraz } from 'fake-cloudflare-zaraz-consent';
-import { type PurposeMapping } from 'sentry-zaraz-consent-integration';
+import { initFakeZaraz } from '@imviidx/fake-cloudflare-zaraz-consent';
+import { type PurposeMapping } from '@imviidx/sentry-zaraz-consent-integration';
 
 // Fake purposes, aka CF Consent
 const purposes = [

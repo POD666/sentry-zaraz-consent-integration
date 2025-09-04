@@ -1,11 +1,11 @@
 # Sentry Zaraz Consent Integration
 
-[![npm version](https://badge.fury.io/js/sentry-zaraz-consent-integration.svg)](https://badge.fury.io/js/sentry-zaraz-consent-integration)
+[![npm version](https://badge.fury.io/js/@imviidx%2Fsentry-zaraz-consent-integration.svg)](https://badge.fury.io/js/@imviidx%2Fsentry-zaraz-consent-integration)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 A TypeScript wrapper around [`@imviidx/sentry-consent-integration`](https://github.com/imviidx/sentry-consent-integration) specifically designed for Cloudflare Zaraz consent management. This package provides a simplified API for integrating Sentry with Zaraz consent choices.
 
-**🌐 [Live Demo](https://pod666.github.io/sentry-zaraz-consent-integration/)**
+**🌐 [Live Demo](https://imviidx.github.io/sentry-zaraz-consent-integration/)**
 
 ## Features
 
@@ -22,15 +22,13 @@ A TypeScript wrapper around [`@imviidx/sentry-consent-integration`](https://gith
 ### Installation
 
 ```bash
-npm install sentry-zaraz-consent-integration
+npm install @imviidx/sentry-zaraz-consent-integration
 ```
-
-**Note**: This package requires a Sentry SDK (like `@sentry/browser`, `@sentry/react`, etc.) as a peer dependency in your project.
 
 ### Basic Usage
 
 ```typescript
-import { sentryZarazConsentIntegration } from 'sentry-zaraz-consent-integration';
+import { sentryZarazConsentIntegration } from '@imviidx/sentry-zaraz-consent-integration';
 import * as Sentry from '@sentry/browser';
 
 Sentry.init({
@@ -101,7 +99,7 @@ interface PurposeMapping {
 Checks if Zaraz consent API is ready and available.
 
 ```typescript
-import { isZarazConsentReady } from 'sentry-zaraz-consent-integration';
+import { isZarazConsentReady } from '@imviidx/sentry-zaraz-consent-integration';
 
 if (isZarazConsentReady()) {
   console.log('Zaraz consent API is ready');
@@ -113,7 +111,7 @@ if (isZarazConsentReady()) {
 Gets the current consent state for all mapped purposes.
 
 ```typescript
-import { getZarazConsentState } from 'sentry-zaraz-consent-integration';
+import { getZarazConsentState } from '@imviidx/sentry-zaraz-consent-integration';
 
 const mapping = {
   functional: ['essential'],
@@ -149,7 +147,7 @@ The integration supports four consent categories that map to different Sentry fe
 ### Basic Zaraz Integration
 
 ```typescript
-import { sentryZarazConsentIntegration } from 'sentry-zaraz-consent-integration';
+import { sentryZarazConsentIntegration } from '@imviidx/sentry-zaraz-consent-integration';
 import * as Sentry from '@sentry/browser';
 
 Sentry.init({
@@ -270,7 +268,7 @@ sentryConsentIntegration({
 });
 
 // After (v3.x - Zaraz-specific wrapper)
-import { sentryZarazConsentIntegration } from 'sentry-zaraz-consent-integration';
+import { sentryZarazConsentIntegration } from '@imviidx/sentry-zaraz-consent-integration';
 
 sentryZarazConsentIntegration({
   purposeMapping: {
@@ -286,7 +284,7 @@ The v3.x API is backward compatible with v1.x:
 
 ```typescript
 // v1.x and v3.x both work the same way
-import { sentryZarazConsentIntegration } from 'sentry-zaraz-consent-integration';
+import { sentryZarazConsentIntegration } from '@imviidx/sentry-zaraz-consent-integration';
 
 sentryZarazConsentIntegration({
   purposeMapping: {
@@ -332,8 +330,8 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Support
 
-- 🌐 [Live Demo](https://pod666.github.io/sentry-zaraz-consent-integration/)
+- 🌐 [Live Demo](https://imviidx.github.io/sentry-zaraz-consent-integration/)
 - 📚 [Demo Documentation](demo/README.md)
-- 🐛 [Issue Tracker](https://github.com/POD666/sentry-zaraz-consent-integration/issues)
+- 🐛 [Issue Tracker](https://github.com/imviidx/sentry-zaraz-consent-integration/issues)
 - 📝 [Changelog](CHANGELOG.md)
 - 🔧 [Base Integration](https://github.com/imviidx/sentry-consent-integration) - The underlying generic consent integration
