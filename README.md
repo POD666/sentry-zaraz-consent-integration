@@ -3,18 +3,19 @@
 [![npm version](https://badge.fury.io/js/sentry-zaraz-consent-integration.svg)](https://badge.fury.io/js/sentry-zaraz-consent-integration)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-A TypeScript integration that dynamically adjusts Sentry configuration based on Cloudflare Zaraz consent preferences, ensuring GDPR and privacy compliance while maintaining optimal error tracking and performance monitoring.
+A TypeScript wrapper around [`@imviidx/sentry-consent-integration`](https://github.com/imviidx/sentry-consent-integration) specifically designed for Cloudflare Zaraz consent management. This package provides a simplified API for integrating Sentry with Zaraz consent choices.
 
 **🌐 [Live Demo](https://pod666.github.io/sentry-zaraz-consent-integration/)**
 
 ## Features
 
-- **🎯 Purpose-based Configuration**: predefined Map Zaraz consent purposes to specific Sentry features
-- **⚡ Real-time Updates**: Automatically adjust Sentry settings when consent changes
-- **📦 Event Queuing**: Queue events during consent determination, process when granted
+- **🎯 Zaraz-Specific**: Purpose-built wrapper for Cloudflare Zaraz consent integration
+- **⚡ Automatic Event Handling**: Listens to Zaraz consent events automatically
+- **📦 Simple API**: Easy-to-use purpose mapping configuration
 - **🛡️ Privacy Compliant**: Respect user consent for different data processing purposes
-- **🔧 Configurable**: Flexible purpose mapping and timeout settings
+- **🔧 Flexible Mapping**: Support for boolean and array-based purpose mapping
 - **📊 Debug Support**: Comprehensive logging for troubleshooting
+- **🔄 Backward Compatible**: Maintains API compatibility with previous versions
 
 ## Quick Start
 
@@ -24,34 +25,113 @@ A TypeScript integration that dynamically adjusts Sentry configuration based on 
 npm install sentry-zaraz-consent-integration
 ```
 
-**Note**: This package requires `@sentry/react` (or another Sentry SDK) and `@sentry/types` as peer dependencies in your project.
+**Note**: This package requires a Sentry SDK (like `@sentry/browser`, `@sentry/react`, etc.) as a peer dependency in your project.
 
 ### Basic Usage
 
-Given following purposes configured in CLoudflare:
-![cloudflare purposes example screenshot](cf-screenshot.png)
-
-Then `purposeMapping` would look like this:
-
 ```typescript
 import { sentryZarazConsentIntegration } from 'sentry-zaraz-consent-integration';
-import * as Sentry from '@sentry/react';
+import * as Sentry from '@sentry/browser';
 
 Sentry.init({
   dsn: 'your-sentry-dsn',
   integrations: [
     sentryZarazConsentIntegration({
       purposeMapping: {
-        functional: ['dqVA'], // requires dqVA consent to be selected
-        analytics: ['USeX'],
-        marketing: true, // always enabled
-        preferences: false, // always disabled
+        functional: ['essential'], // Requires 'essential' purpose to be granted
+        analytics: ['analytics'], // Requires 'analytics' purpose to be granted
+        marketing: ['marketing'], // Requires 'marketing' purpose to be granted
+        preferences: ['preferences'], // Requires 'preferences' purpose to be granted
       },
-      debug: true, // Enable debug logging
+      debug: true,
     }),
   ],
 });
 ```
+
+## API Reference
+
+### sentryZarazConsentIntegration(options)
+
+The main integration function for Cloudflare Zaraz consent management.
+
+#### Options
+
+| Property         | Type             | Required | Description                                                    |
+| ---------------- | ---------------- | -------- | -------------------------------------------------------------- |
+| `purposeMapping` | `PurposeMapping` | Yes      | Maps consent categories to Zaraz purpose IDs or boolean values |
+| `zarazTimeout`   | `number`         | No       | Timeout in ms to wait for Zaraz to be ready (default: 30000)   |
+| `debug`          | `boolean`        | No       | Enable debug logging (default: false)                          |
+
+#### PurposeMapping
+
+```typescript
+interface PurposeMapping {
+  functional?: string[] | boolean; // Core error tracking
+  analytics?: string[] | boolean; // Performance monitoring
+  preferences?: string[] | boolean; // PII and session replay
+  marketing?: string[] | boolean; // User identification
+}
+```
+
+#### Purpose Mapping Examples
+
+```typescript
+// Map to Zaraz purpose IDs
+{
+  functional: ['essential'],           // Requires 'essential' purpose
+  analytics: ['analytics', 'stats'],   // Requires BOTH 'analytics' AND 'stats'
+  preferences: ['personalization'],   // Requires 'personalization' purpose
+  marketing: ['advertising']          // Requires 'advertising' purpose
+}
+
+// Mixed mapping with booleans
+{
+  functional: true,                   // Always granted
+  analytics: ['analytics'],           // Requires 'analytics' purpose
+  preferences: false,                 // Always denied
+  marketing: ['marketing', 'ads']     // Requires BOTH purposes
+}
+```
+
+### Utility Functions
+
+#### isZarazConsentReady()
+
+Checks if Zaraz consent API is ready and available.
+
+```typescript
+import { isZarazConsentReady } from 'sentry-zaraz-consent-integration';
+
+if (isZarazConsentReady()) {
+  console.log('Zaraz consent API is ready');
+}
+```
+
+#### getZarazConsentState(purposeMapping)
+
+Gets the current consent state for all mapped purposes.
+
+```typescript
+import { getZarazConsentState } from 'sentry-zaraz-consent-integration';
+
+const mapping = {
+  functional: ['essential'],
+  analytics: ['analytics'],
+};
+
+const consentState = getZarazConsentState(mapping);
+// Returns: { functional: boolean, analytics: boolean, marketing: boolean, preferences: boolean }
+```
+
+## Underlying Technology
+
+This package is a wrapper around [`@imviidx/sentry-consent-integration`](https://github.com/imviidx/sentry-consent-integration), which provides the core consent management functionality. The wrapper handles:
+
+- **Zaraz API Integration**: Automatically connects to `window.zaraz.consent` API
+- **Event Listening**: Listens for `zarazConsentChoicesUpdated` and `zarazConsentAPIReady` events
+- **Purpose Mapping**: Translates Zaraz purpose IDs to consent categories
+- **Simplified Configuration**: Reduces boilerplate code for Zaraz users
 
 ## Purpose Mapping
 
@@ -64,54 +144,63 @@ The integration supports four consent categories that map to different Sentry fe
 | **Preferences** | Session replay, PII collection, user context, personalization         | Personal data and customized experiences             |
 | **Marketing**   | User identification for A/B testing, feature flags, campaign tracking | User interaction and behavior analysis for marketing |
 
-> **Session Tracking Note**: Basic session status tracking for release health (`autoSessionTracking`) is categorized under **functional** consent as it's essential for error monitoring. Detailed session analytics integrations that track user adoption patterns over time would be categorized under **analytics** consent.
+## Configuration Examples
 
-## Configuration
-
-### SentryZarazConsentIntegrationOptions
+### Basic Zaraz Integration
 
 ```typescript
-interface SentryZarazConsentIntegrationOptions {
-  /**
-   * Purpose mapping for Zaraz consent purposes
-   * Maps consent categories to Zaraz purpose IDs
-   */
-  purposeMapping: PurposeMapping;
+import { sentryZarazConsentIntegration } from 'sentry-zaraz-consent-integration';
+import * as Sentry from '@sentry/browser';
 
-  /**
-   * Enable debug logging
-   * @default false
-   */
-  debug?: boolean;
-}
+Sentry.init({
+  dsn: 'your-sentry-dsn',
+  integrations: [
+    sentryZarazConsentIntegration({
+      purposeMapping: {
+        functional: ['essential'],
+        analytics: ['analytics'],
+        marketing: ['marketing'],
+        preferences: ['personalization'],
+      },
+      zarazTimeout: 30000, // 30 seconds
+      debug: true,
+    }),
+  ],
+});
 ```
 
-### Purpose Mapping Structure
+### Advanced Purpose Mapping
 
 ```typescript
-interface PurposeMapping {
-  functional?: string[]; // Core functionality
-  analytics?: string[]; // Performance monitoring and detailed context
-  preferences?: string[]; // PII and session replay (privacy-sensitive)
-  marketing?: string[]; // User identification and behavioral analysis
-}
-```
+sentryZarazConsentIntegration({
+  purposeMapping: {
+    // Always allow functional tracking (essential for app operation)
+    functional: true,
 
-> **Marketing Purpose Note**: The `marketing` purpose is primarily used for user identification within `initialScope` (such as setting `user.id`, custom tags for A/B testing, or campaign tracking), feature flag integrations, and analytics cohorts. This distinguishes it from the `preferences` purpose, which deals with collecting raw PII and detailed screen recordings.
+    // Require both analytics AND performance consent
+    analytics: ['analytics', 'performance'],
+
+    // Never allow marketing tracking in this configuration
+    marketing: false,
+
+    // Only allow personalization if user explicitly consents
+    preferences: ['personalization', 'customization'],
+  },
+  debug: process.env.NODE_ENV === 'development',
+});
+```
 
 ## Integration Behavior
 
 ### Event Processing Flow
 
 1. **Event Captured**: Sentry attempts to capture an event
-2. **Consent Check**: Integration checks current consent status
+2. **Consent Check**: Integration checks current Zaraz consent status
 3. **Decision Making**:
    - ✅ **Consent Granted**: Event is allowed through
    - ❌ **Consent Denied**: Event is blocked
-   - ⏳ **Consent Unknown**: Event is blocked (no queuing by default)
-4. **Real-time Updates**: When consent changes, Sentry configuration updates immediately
-
-> **Note**: Since v1.1.0, events are not queued when consent is unknown. The integration maintains strict privacy by default and only processes events when explicit consent is granted.
+   - ⏳ **Zaraz Not Ready**: Event is blocked until Zaraz becomes available
+4. **Real-time Updates**: When Zaraz consent changes, Sentry configuration updates immediately
 
 ### Sentry Configuration Adjustments
 
@@ -143,37 +232,71 @@ initialScope: marketingConsent
   : {};
 ```
 
-> **Privacy by Default**: Even when `preferences` consent is granted, Session Replay uses Sentry's safest defaults (maskAllText: true, maskAllInputs: true, blockAllMedia: true). Developers must explicitly override these settings if they need to capture unmasked content for debugging purposes.
+````
 
-## Development
+## Demo
 
-### Building
+The package includes a demo that shows the integration working with Cloudflare Zaraz consent management. The demo uses `fake-cloudflare-zaraz-consent` to simulate a real Zaraz environment.
+
+To run the demo:
 
 ```bash
-# Build the integration
-npm run build
+npm run demo:install
+npm run demo:dev
+````
 
-# Build in watch mode
-npm run build:watch
+Visit [http://localhost:3000](http://localhost:3000) to see the integration in action.
 
-# Build demo project
-npm run demo:build
+## Migration Guide
+
+### From v2.x (Generic Package)
+
+If you're upgrading from the generic `sentry-consent-integration` v2.x:
+
+```typescript
+// Before (v2.x - generic)
+import { sentryConsentIntegration } from 'sentry-consent-integration';
+
+sentryConsentIntegration({
+  getConsentState: () => ({
+    functional: window.zaraz?.consent?.get('essential') ?? false,
+    analytics: window.zaraz?.consent?.get('analytics') ?? false,
+    // ... more Zaraz-specific code
+  }),
+  onConsentChange: (callback) => {
+    document.addEventListener('zarazConsentChoicesUpdated', callback);
+    // ... more Zaraz event handling
+  },
+});
+
+// After (v3.x - Zaraz-specific wrapper)
+import { sentryZarazConsentIntegration } from 'sentry-zaraz-consent-integration';
+
+sentryZarazConsentIntegration({
+  purposeMapping: {
+    functional: ['essential'],
+    analytics: ['analytics'],
+  },
+});
 ```
 
-### Project Structure
+### From v1.x (Legacy)
 
-```
-├── src/
-│   ├── SentryZarazConsentIntegration.ts  # Main integration
-│   ├── zaraz.ts                          # Zaraz consent utilities
-│   └── eventLogger.ts                    # Logging utilities
-├── demo/
-│   ├── index.html                        # Demo interface
-│   ├── src/
-│   │   └── main.ts                       # Demo application
-│   └── README.md                         # Demo documentation
-├── dist/                                 # Compiled JavaScript
-└── CHANGELOG.md                          # Version history
+The v3.x API is backward compatible with v1.x:
+
+```typescript
+// v1.x and v3.x both work the same way
+import { sentryZarazConsentIntegration } from 'sentry-zaraz-consent-integration';
+
+sentryZarazConsentIntegration({
+  purposeMapping: {
+    functional: ['essential'],
+    analytics: ['analytics'],
+    marketing: ['marketing'],
+    preferences: ['personalization'],
+  },
+  debug: true,
+});
 ```
 
 ## Browser Compatibility
@@ -181,18 +304,19 @@ npm run demo:build
 - ES2020+ support required
 - Modern browsers (Chrome 80+, Firefox 74+, Safari 13.1+, Edge 80+)
 - ES Modules support
-- Fetch API support
+- Cloudflare Zaraz environment
 
 ## Dependencies
 
+### Required Dependencies
+
+- `@imviidx/sentry-consent-integration`: Core consent management functionality
+- `zaraz-ts`: TypeScript definitions for Zaraz APIs
+
 ### Required Peer Dependencies
 
-- `@sentry/react` (^8.29.0 or compatible Sentry SDK)
+- `@sentry/browser` OR `@sentry/react` OR `@sentry/vue` (^8.29.0)
 - `@sentry/types` (^8.29.0)
-
-### Package Dependencies
-
-- `zaraz-ts` (^1.2.0) - TypeScript definitions for Zaraz APIs
 
 ## Contributing
 
@@ -212,3 +336,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 - 📚 [Demo Documentation](demo/README.md)
 - 🐛 [Issue Tracker](https://github.com/POD666/sentry-zaraz-consent-integration/issues)
 - 📝 [Changelog](CHANGELOG.md)
+- 🔧 [Base Integration](https://github.com/imviidx/sentry-consent-integration) - The underlying generic consent integration

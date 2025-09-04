@@ -10,7 +10,7 @@ export const App: React.FC = () => {
       {/* Header */}
       <div className='bg-white rounded-lg p-6 shadow-sm mb-6'>
         <h1 className='text-slate-800 mt-0 flex flex-wrap items-center justify-between'>
-          Sentry Zaraz Consent Integration Demo
+          Sentry Consent Integration Demo
           <a
             href='https://github.com/POD666/fake-cloudflare-zaraz-consent'
             target='_blank'
@@ -21,9 +21,10 @@ export const App: React.FC = () => {
           </a>
         </h1>
         <p className='text-slate-600'>
-          This demo shows how Sentry configuration changes based on Zaraz
-          consent settings (the fake one is used for the demo). Toggle consent
-          purposes below and observe how Sentry behavior adapts.
+          This demo shows how Sentry configuration changes based on consent
+          settings using the generic consent integration. A fake Zaraz consent
+          system is used for the demo to showcase the backward compatibility
+          wrapper.
         </p>
       </div>
 

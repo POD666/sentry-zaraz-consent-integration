@@ -1,16 +1,16 @@
 {
   "name": "sentry-zaraz-consent-integration",
-  "version": "1.2.1",
+  "version": "3.0.0",
   "type": "module",
-  "description": "Adjust Sentry configuration according to current Zaraz Consent selection",
-  "main": "dist/SentryZarazConsentIntegration.js",
-  "module": "dist/SentryZarazConsentIntegration.js",
-  "types": "dist/SentryZarazConsentIntegration.d.ts",
+  "description": "A wrapper around @imviidx/sentry-consent-integration specifically for Cloudflare Zaraz consent management",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/SentryZarazConsentIntegration.js",
-      "require": "./dist/SentryZarazConsentIntegration.js",
-      "types": "./dist/SentryZarazConsentIntegration.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
     }
   },
   "files": [
@@ -36,9 +36,11 @@
   },
   "keywords": [
     "sentry",
-    "zaraz",
     "consent",
-    "gdpr"
+    "gdpr",
+    "privacy",
+    "zaraz",
+    "cloudflare"
   ],
   "author": "v.v.danyliuk@gmail.com",
   "license": "MIT",
@@ -47,14 +49,29 @@
   },
   "homepage": "https://github.com/POD666/sentry-zaraz-consent-integration#readme",
   "dependencies": {
-    "@sentry/react": "^8.29.0",
-    "@sentry/types": "^8.29.0",
-    "sentry": "^0.1.2",
+    "@imviidx/sentry-consent-integration": "^0.1.2",
     "zaraz-ts": "^1.2.0"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
     "typescript": "^5.9.2",
     "np": "^10.2.0"
+  },
+  "peerDependencies": {
+    "@sentry/browser": "^8.29.0",
+    "@sentry/react": "^8.29.0",
+    "@sentry/vue": "^8.29.0",
+    "@sentry/types": "^8.29.0"
+  },
+  "peerDependenciesMeta": {
+    "@sentry/browser": {
+      "optional": true
+    },
+    "@sentry/react": {
+      "optional": true
+    },
+    "@sentry/vue": {
+      "optional": true
+    }
   }
 }

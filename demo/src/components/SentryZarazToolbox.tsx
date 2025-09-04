@@ -48,8 +48,8 @@ export const SentryZarazToolbox: React.FC<SentryZarazToolboxProps> = ({
             <span className='text-slate-600 text-sm'>
               {purpose === 'functional' && 'Required for core error tracking'}
               {purpose === 'analytics' && 'Performance monitoring & metrics'}
-              {purpose === 'marketing' && 'Session replay & user behavior'}
-              {purpose === 'preferences' && 'PII collection & personalization'}
+              {purpose === 'marketing' && 'User identification & A/B testing'}
+              {purpose === 'preferences' && 'Session replay & PII collection'}
             </span>
           </div>
         ))}

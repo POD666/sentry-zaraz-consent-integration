@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getConsentStatus, zaraz } from 'sentry-zaraz-consent-integration';
+import { getZarazConsentState } from 'sentry-zaraz-consent-integration';
+import { zaraz } from 'zaraz-ts';
 import { purposeMapping } from '../fake-zaraz.js';
 
 interface ConsentState {
@@ -26,7 +27,7 @@ export const useZarazConsentShortcuts = () => {
 
   const monitorConsentChanges = useCallback(() => {
     try {
-      const newConsent = getConsentStatus(purposeMapping);
+      const newConsent = getZarazConsentState(purposeMapping);
       setCurrentConsent(newConsent);
       setCurrentConsentCheboxes(zaraz?.consent?.getAllCheckboxes?.() ?? {});
       console.log('📋 Consent updated from Zaraz:', newConsent);
